@@ -53,5 +53,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  <key>UIAppFonts</key>
+  <array>
+    <string>MaterialIcons.ttf</string>
+    <string>MaterialCommunityIcons.ttf</string>
+  </array>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>The microphone is required to transcript audio to text</string>
+  <key>NSSpeechRecognitionUsageDescription</key>
+  <string>The speech recognition is required to transcript</string>
 </dict>
 </plist>
