@@ -8,45 +8,40 @@ import {
   StartButton,
   StopButton,
   StopButtonText,
+  Title,
   TranscriptContainer,
-  TranscriptText,
-  TranscriptListening
+  TranscriptText
 } from './styles';
 
 const Main = () => {
   const [started, setStarted] = useState(false);
-  const [transcript, setTranscript] = useState([]);
+  const [result, setResult] = useState([]);
+  const [sentence, setSentence] = useState(0);
 
-  const onSpeechStart = e => {
-    // console.tron.log('speech start:', e);
+  const onSpeechStartHandler = () => {
     setStarted(true);
   };
 
-  const onSpeechRecognized = e => {
-    // console.tron.log('speech recognized:', e);
+  const onSpeechEndHandler = async () => {
+    setSentence(current => current + 1);
+    await Voice.start('pt-BR');
   };
 
-  const onSpeechEnd = e => {
-    console.tron.log('speech end:', e);
+  const onSpeechErrorHandler = e => {
+    console.tron.log('speech error:', e?.error ?? 'empty');
   };
 
-  const onSpeechError = e => {
-    // console.tron.log('speech error:', e);
-  };
-
-  const onSpeechResults = e => {
-    console.tron.log('speech results:', e);
+  const onSpeechResultsHandler = e => {
     if (e?.value) {
-      setTranscript(currentValue => [...currentValue, e.value]);
+      setResult(currentValue => {
+        if (currentValue[sentence]) {
+          const newValue = [...currentValue];
+          newValue[sentence] = e.value;
+          return newValue;
+        }
+        return [...currentValue, e.value];
+      });
     }
-  };
-
-  const onSpeechPartialResults = e => {
-    // console.tron.log('speech partial results:', e);
-  };
-
-  const onSpeechVolumeChanged = e => {
-    // console.tron.log('speech volume changed:', e);
   };
 
   const start = async () => {
@@ -74,13 +69,10 @@ const Main = () => {
       console.tron.error(err);
     }
 
-    Voice.onSpeechStart = onSpeechStart;
-    Voice.onSpeechRecognized = onSpeechRecognized;
-    Voice.onSpeechEnd = onSpeechEnd;
-    Voice.onSpeechError = onSpeechError;
-    Voice.onSpeechResults = onSpeechResults;
-    Voice.onSpeechPartialResults = onSpeechPartialResults;
-    Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
+    Voice.onSpeechEnd = onSpeechEndHandler;
+    Voice.onSpeechError = onSpeechErrorHandler;
+    Voice.onSpeechResults = onSpeechResultsHandler;
+    Voice.onSpeechStart = onSpeechStartHandler;
   }, []);
 
   return (
@@ -93,11 +85,14 @@ const Main = () => {
       )}
       {started && (
         <>
+          <Title>Results [{sentence}]:</Title>
           <TranscriptContainer>
-            {transcript.map(t => (
-              <TranscriptText>{t}</TranscriptText>
+            {result.map((text, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <TranscriptText key={`sentence-${index}`}>
+                :: {text} ::
+              </TranscriptText>
             ))}
-            <TranscriptListening>Ouvindo...</TranscriptListening>
           </TranscriptContainer>
           <StopButton onPress={() => stop()}>
             <StopButtonText>Parar Transcrição</StopButtonText>

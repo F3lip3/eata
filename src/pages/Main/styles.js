@@ -37,6 +37,15 @@ export const StopButtonText = styled.Text`
   color: #fff;
 `;
 
+export const Title = styled.Text`
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  padding: 15px 0 5px 0;
+  justify-content: flex-start;
+`;
+
 export const TranscriptContainer = styled.View`
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -49,11 +58,7 @@ export const TranscriptContainer = styled.View`
 `;
 
 export const TranscriptText = styled.Text`
-  font-size: 22px;
+  font-size: 18px;
+  line-height: 30px;
   color: #333;
-`;
-
-export const TranscriptListening = styled.Text`
-  font-size: 22px;
-  color: #666;
 `;

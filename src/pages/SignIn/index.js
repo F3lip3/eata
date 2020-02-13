@@ -7,9 +7,10 @@ import { Container } from './styles';
 const SignIn = ({ navigation }) => {
   return (
     <Container>
-      <Button title="Entrar" onPress={() => navigation.navigate('Main')}>
-        Entrar
-      </Button>
+      <Button
+        title="Native Speech Recognition"
+        onPress={() => navigation.navigate('Main')}
+      />
     </Container>
   );
 };
